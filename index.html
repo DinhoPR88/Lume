@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>lume - v14.0 Progress Edition</title>
+    <title>lume - v14.1 Gold Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -32,7 +32,7 @@
         .auth-card input { width: 100%; padding: 18px; border-radius: 20px; background: rgba(255,255,255,0.4); margin-bottom: 12px; border: 1px solid var(--glass-border); color: var(--texto); font-family: inherit; }
         .pro-badge { color: var(--menta); font-size: 0.75rem; letter-spacing: 3px; margin-top: 20px; font-weight: 600; text-transform: uppercase; }
 
-        /* ESTRUTURA APP */
+        /* APP STRUCTURE */
         #app-wrapper { display: none; height: 100vh; flex-direction: column; opacity: 0; transition: 0.8s; }
         .main-content { flex: 1; overflow-y: auto; padding: 20px 20px 140px; display: flex; flex-direction: column; align-items: center; width: 100%; }
         .tab-section { display: none; width: 100%; flex-direction: column; align-items: center; }
@@ -46,7 +46,7 @@
         .icon-boost { width: 195px !important; height: 195px !important; }
         .icon-ghost-right { position: absolute; right: -140px; width: 400px; height: 400px; object-fit: contain; opacity: 0.12; z-index: 1; transform: rotate(15deg); }
 
-        /* RESPIRAR */
+        /* RESPIRAR LUXURY */
         .respira-viewport { justify-content: center; height: 85vh; position: relative; display: flex; align-items: center; }
         .breath-hollow-circle { 
             width: 220px; height: 220px; border-radius: 50%; position: relative; border: 2px solid rgba(255,255,255,0.2);
@@ -54,12 +54,12 @@
             animation: breatheAnimationLuxury 8s infinite ease-in-out; 
         }
         @keyframes breatheAnimationLuxury { 
-            0%, 100% { transform: scale(1); opacity: 0.5; filter: blur(6px); } 
+            0%, 100% { transform: scale(1); opacity: 0.5; filter: blur(6px); box-shadow: 0 0 30px 5px var(--fumaça-menta), inset 0 0 20px 2px var(--fumaça-menta); } 
             50% { transform: scale(1.8); opacity: 1; filter: blur(1px); box-shadow: 0 0 80px 25px var(--fumaça-menta), inset 0 0 50px 10px var(--fumaça-menta); } 
         }
         #breath-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.8rem; color: var(--menta); font-weight: 600; text-shadow: 0 0 20px rgba(255,255,255,0.8); z-index: 10; pointer-events: none; }
 
-        /* PLAYER & PROGRESO */
+        /* PLAYER & PROGRESSO */
         .neon-ring { width: 220px; height: 220px; border-radius: 50%; border: 4px solid transparent; background: var(--neon-glow) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask-composite: exclude; animation: rotate 12s linear infinite; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(77, 182, 172, 0.2); }
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .bar-chart { height: 150px; display: flex; align-items: flex-end; gap: 12px; margin: 30px 0; }
@@ -236,13 +236,13 @@
         function toggleAudio() {
             const b = document.getElementById('playBtn');
             if (audio.paused) {
-                if (!audio.src || audio.src === "") {
+                if (!audio.src || audio.src === "" || audio.src.includes(window.location.host)) {
                     audio.src = playlist[currentTrackIndex].file;
                 }
                 audio.play().then(() => {
                     b.innerText = "⏸️";
                 }).catch(e => {
-                    alert("Erro ao carregar áudio. Verifique se os arquivos mp3 estão na pasta raiz do GitHub.");
+                    alert("Sintonização falhou. Verifique se os arquivos mp3 estão na raiz do GitHub com nomes em minúsculas.");
                 });
             } else {
                 audio.pause();
@@ -254,8 +254,10 @@
             currentTrackIndex = (currentTrackIndex + d + playlist.length) % playlist.length;
             document.getElementById('music-title').innerText = playlist[currentTrackIndex].title;
             audio.src = playlist[currentTrackIndex].file;
-            if (!audio.paused) audio.play();
-            document.getElementById('playBtn').innerText = audio.paused ? "▶️" : "⏸️";
+            audio.load();
+            if (document.getElementById('playBtn').innerText === "⏸️") {
+                audio.play().catch(e => console.error("Erro ao trocar faixa"));
+            }
         }
 
         function addMessage(t, x) {
