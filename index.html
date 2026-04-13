@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>lume - v14.1 Gold Edition</title>
+    <title>lume - v16.2 Absolute Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -26,54 +26,43 @@
 
         .glass { background: var(--glass); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 35px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
 
-        /* LOGIN */
-        #auth-screen { position: fixed; inset: 0; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; transition: 0.6s; }
+        #auth-screen { position: fixed; inset: 0; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; background: #FFF9F2; }
         .auth-card { width: 100%; max-width: 350px; padding: 40px; text-align: center; }
         .auth-card input { width: 100%; padding: 18px; border-radius: 20px; background: rgba(255,255,255,0.4); margin-bottom: 12px; border: 1px solid var(--glass-border); color: var(--texto); font-family: inherit; }
-        .pro-badge { color: var(--menta); font-size: 0.75rem; letter-spacing: 3px; margin-top: 20px; font-weight: 600; text-transform: uppercase; }
 
-        /* APP STRUCTURE */
-        #app-wrapper { display: none; height: 100vh; flex-direction: column; opacity: 0; transition: 0.8s; }
+        #app-wrapper { display: none; height: 100vh; flex-direction: column; opacity: 0; transition: 0.8s; position: relative; z-index: 10; }
         .main-content { flex: 1; overflow-y: auto; padding: 20px 20px 140px; display: flex; flex-direction: column; align-items: center; width: 100%; }
         .tab-section { display: none; width: 100%; flex-direction: column; align-items: center; }
         .tab-section.active { display: flex; animation: fadeIn 0.5s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* HOME GRID */
         .grid-portas { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 400px; }
         .card-porta { position: relative; height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; overflow: hidden; }
         .icon-img-main { width: 130px; height: 130px; object-fit: contain; z-index: 5; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15)); margin-bottom: 5px; }
-        .icon-boost { width: 195px !important; height: 195px !important; }
         .icon-ghost-right { position: absolute; right: -140px; width: 400px; height: 400px; object-fit: contain; opacity: 0.12; z-index: 1; transform: rotate(15deg); }
 
-        /* RESPIRAR LUXURY */
         .respira-viewport { justify-content: center; height: 85vh; position: relative; display: flex; align-items: center; }
         .breath-hollow-circle { 
-            width: 220px; height: 220px; border-radius: 50%; position: relative; border: 2px solid rgba(255,255,255,0.2);
+            width: 220px; height: 220px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2);
             box-shadow: 0 0 30px 5px var(--fumaça-menta), inset 0 0 20px 2px var(--fumaça-menta);
             animation: breatheAnimationLuxury 8s infinite ease-in-out; 
         }
         @keyframes breatheAnimationLuxury { 
-            0%, 100% { transform: scale(1); opacity: 0.5; filter: blur(6px); box-shadow: 0 0 30px 5px var(--fumaça-menta), inset 0 0 20px 2px var(--fumaça-menta); } 
+            0%, 100% { transform: scale(1); opacity: 0.5; filter: blur(6px); } 
             50% { transform: scale(1.8); opacity: 1; filter: blur(1px); box-shadow: 0 0 80px 25px var(--fumaça-menta), inset 0 0 50px 10px var(--fumaça-menta); } 
         }
         #breath-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.8rem; color: var(--menta); font-weight: 600; text-shadow: 0 0 20px rgba(255,255,255,0.8); z-index: 10; pointer-events: none; }
 
-        /* PLAYER & PROGRESSO */
-        .neon-ring { width: 220px; height: 220px; border-radius: 50%; border: 4px solid transparent; background: var(--neon-glow) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask-composite: exclude; animation: rotate 12s linear infinite; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(77, 182, 172, 0.2); }
-        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .bar-chart { height: 150px; display: flex; align-items: flex-end; gap: 12px; margin: 30px 0; }
-        .bar { width: 30px; background: var(--menta); border-radius: 8px 8px 0 0; transition: 1s ease-out; }
-
-        /* CHAT REVISADO */
-        #chat-messages { width: 100%; flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
-        .msg { padding: 15px 20px; border-radius: 20px; max-width: 85%; font-size: 0.95rem; line-height: 1.4; }
+        #chat-messages { width: 100%; flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+        .msg { padding: 15px 20px; border-radius: 25px; max-width: 85%; font-size: 0.95rem; line-height: 1.4; animation: msgSlide 0.3s ease; }
+        @keyframes msgSlide { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .msg.user { align-self: flex-end; background: var(--menta); color: white; border-bottom-right-radius: 5px; }
         .msg.bot { align-self: flex-start; background: var(--glass); color: var(--texto); border-bottom-left-radius: 5px; }
-        .chat-input-container { width: 100%; padding: 15px; background: var(--glass); backdrop-filter: blur(20px); border-top: 1px solid var(--glass-border); display: flex; align-items: center; gap: 10px; border-radius: 30px; margin-top: 10px; }
-        .chat-input-container input { flex: 1; background: transparent; padding: 10px; color: var(--texto); font-size: 1rem; }
+        .chat-input-wrapper { width: 100%; padding: 15px; position: sticky; bottom: 0; }
+        .chat-input-container { background: var(--glass); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); padding: 10px 20px; border-radius: 50px; display: flex; align-items: center; gap: 10px; }
+        .chat-input-container input { flex: 1; background: transparent; color: var(--texto); font-size: 1rem; }
+        .chat-send-btn { background: var(--menta); color: white; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; }
 
-        /* NAV */
         nav { position: fixed; bottom: 30px; left: 30px; right: 30px; height: 85px; display: flex; justify-content: space-around; align-items: center; z-index: 2000; }
         .nav-item { text-align: center; color: #90A4AE; font-size: 0.65rem; font-weight: 600; flex: 1; cursor: pointer; }
         .nav-item.active { color: var(--menta); transform: translateY(-5px); transition: 0.3s; }
@@ -92,7 +81,7 @@
             <input type="text" id="login-name" placeholder="Nome">
             <input type="password" id="login-pass" placeholder="Senha">
             <div class="btn-gold" onclick="entrar()">Sintonizar</div>
-            <div class="pro-badge">LUME PRO</div>
+            <div style="color:var(--menta); font-size:0.75rem; letter-spacing:3px; margin-top:20px; font-weight:600;">LUME PRO</div>
         </div>
     </div>
 
@@ -101,8 +90,6 @@
             <section id="home-tab" class="tab-section active">
                 <div style="font-family: 'Comfortaa'; color: var(--menta); font-size: 2.8rem;">lume</div>
                 <h2 style="font-weight: 300; margin: 25px 0;">Olá, <span id="user-display">Eliade</span></h2>
-                <div class="glass" style="width:100%; padding:20px; text-align:center; color:var(--menta); margin-bottom:25px;" id="mural-text">"Sintonize sua paz"</div>
-                
                 <div class="grid-portas">
                     <div class="card-porta glass" onclick="switchTab('neuro-tab', '')">
                         <img src="./neuro.png" class="icon-ghost-right"><img src="./neuro.png" class="icon-img-main"><b>Neuro</b>
@@ -119,74 +106,25 @@
                 </div>
             </section>
 
-            <section id="neuro-tab" class="tab-section">
-                <div class="glass" style="width:100%; padding:50px; text-align:center;">
-                    <span style="font-size:4rem;">🔒</span>
-                    <h2 style="margin-top:20px; color:var(--menta); font-weight:400;">Acesso Restrito</h2>
-                    <p style="margin-top:15px; color:var(--texto); opacity:0.8;">Solicite o desbloqueio com seu especialista para acessar este módulo.</p>
-                </div>
-                <button class="btn-gold" onclick="switchTab('home-tab', 'home-nav')">Voltar</button>
-            </section>
-
-            <section id="respira-tab" class="tab-section respira-viewport">
-                <div class="breath-hollow-circle"></div>
-                <p id="breath-text">Inspire...</p>
-                <button class="btn-gold" style="margin-top:80px; width:200px; z-index:20;" onclick="pararRespirar()">Concluir</button>
-            </section>
-
-            <section id="sons-tab" class="tab-section">
-                <div class="glass" style="padding:40px; text-align:center; display:flex; flex-direction:column; align-items:center;">
-                    <div class="neon-ring"><span style="font-size:5rem;">🎵</span></div>
-                    <h3 id="music-title" style="margin-top:25px; color:var(--menta);">Sintonização 432Hz</h3>
-                    <div style="display:flex; justify-content:center; gap:20px; margin-top:25px;">
-                        <button class="glass" onclick="changeTrack(-1)" style="padding:15px;">⏮️</button>
-                        <button class="glass" id="playBtn" onclick="toggleAudio()" style="padding:15px; width:75px;">▶️</button>
-                        <button class="glass" onclick="changeTrack(1)" style="padding:15px;">⏭️</button>
-                    </div>
-                </div>
-                <button class="btn-gold" onclick="switchTab('home-tab', 'home-nav')">Voltar</button>
-            </section>
-
-            <section id="progresso-tab" class="tab-section">
-                <h2 style="font-weight:300; margin-bottom:20px;">Meu Progresso</h2>
-                <div class="glass" style="width:100%; padding:40px; text-align:center; display:flex; flex-direction:column; align-items:center;">
-                    <div class="bar-chart">
-                        <div class="bar" style="height: 45%"></div>
-                        <div class="bar" style="height: 80%"></div>
-                        <div class="bar" style="height: 65%"></div>
-                        <div class="bar" style="height: 90%"></div>
-                    </div>
-                    <div class="btn-gold" onclick="alert('Relatório de progresso enviado.')">COMPARTILHAR COM ESPECIALISTA</div>
-                </div>
-                <button class="btn-gold" style="background:rgba(255,255,255,0.2);" onclick="switchTab('home-tab', 'home-nav')">Voltar</button>
-            </section>
-
-            <section id="ebooks-tab" class="tab-section">
-                <h2 style="font-weight:300; margin-bottom:20px;">Biblioteca e-books</h2>
-                <div class="glass" style="width:100%; padding:40px; text-align:center;">
-                    <p>Guia Prático de Frequências (PDF)</p>
-                    <div class="btn-gold">Baixar Agora</div>
-                </div>
-                <button class="btn-gold" onclick="switchTab('home-tab', 'home-nav')">Voltar</button>
-            </section>
-
-            <section id="chat-tab" class="tab-section" style="height:70vh;">
+            <section id="chat-tab" class="tab-section" style="height:75vh; padding-bottom: 0;">
                 <div id="chat-messages"></div>
-                <div class="chat-input-container">
-                    <input type="text" id="chatInput" placeholder="Sintonizar pensamentos...">
-                    <button onclick="enviarMensagemAI()" style="color:var(--menta); font-weight:700; background:none; padding:0 10px;">ENVIAR</button>
+                <div class="chat-input-wrapper">
+                    <div class="chat-input-container">
+                        <input type="text" id="chatInput" placeholder="Fale com o Txai..." onkeypress="if(event.key==='Enter') enviarMensagemIA()">
+                        <button class="chat-send-btn" onclick="enviarMensagemIA()">↑</button>
+                    </div>
                 </div>
             </section>
 
-            <section id="config-tab" class="tab-section">
-                <h2 style="font-weight:300; margin-bottom:20px;">Configs</h2>
-                <div class="glass" style="width:100%; padding:30px; text-align:center;">
-                    <div class="btn-gold" style="background:#FF5252; color:white;" onclick="location.reload()">SAIR DA CONTA</div>
-                </div>
-            </section>
+            <section id="neuro-tab" class="tab-section"><div class="glass" style="padding:50px; text-align:center;">🔒 Acesso Restrito.</div><button class="btn-gold" onclick="switchTab('home-tab', 'home-nav')">Voltar</button></section>
+            <section id="respira-tab" class="tab-section respira-viewport"><div class="breath-hollow-circle"></div><p id="breath-text">Inspire...</p><button class="btn-gold" style="margin-top:80px; width:200px;" onclick="pararRespirar()">Concluir</button></section>
+            <section id="sons-tab" class="tab-section"><div class="glass" style="padding:40px;">Playlist em 432Hz</div><button class="btn-gold" onclick="switchTab('home-tab', 'home-nav')">Voltar</button></section>
+            <section id="progresso-tab" class="tab-section"><h2 style="font-weight:300;">Meu Progresso</h2><div class="glass" style="width:100%; padding:40px;">Status de Sintonização</div><button class="btn-gold" onclick="switchTab('home-tab', 'home-nav')">Voltar</button></section>
+            <section id="ebooks-tab" class="tab-section"><h2 style="font-weight:300;">e-books</h2><div class="glass" style="width:100%; padding:40px;">Biblioteca Digital</div><button class="btn-gold" onclick="switchTab('home-tab', 'home-nav')">Voltar</button></section>
+            <section id="config-tab" class="tab-section"><h2 style="font-weight:300;">Configs</h2><div class="glass" style="width:100%; padding:30px;"><div class="btn-gold" style="background:#FF5252; color:white;" onclick="location.reload()">Sair</div></div></section>
         </div>
 
-        <nav class="glass">
+        <nav id="app-nav" class="glass" style="display:none;">
             <div id="home-nav" class="nav-item active" onclick="switchTab('home-tab', 'home-nav')"><span>🏠</span>Home</div>
             <div id="prog-nav" class="nav-item" onclick="switchTab('progresso-tab', 'prog-nav')"><span>📈</span>Progresso</div>
             <div id="txai-nav" class="nav-item" onclick="switchTab('chat-tab', 'txai-nav')"><span>💬</span>Txai</div>
@@ -195,14 +133,9 @@
     </div>
 
     <script>
-        const audio = new Audio();
+        const GEMINI_API_KEY = "AIzaSyDZSCogB7fH04o9NfmjHKnHCLqy5HTTJCo"; 
         let userName = "";
         let breathInterval;
-        let currentTrackIndex = 0;
-        const playlist = [
-            { title: "Sintonização 432Hz", file: "./432hz.mp3" }, 
-            { title: "Frequência 528Hz", file: "./528hz.mp3" }
-        ];
 
         function entrar() {
             const n = document.getElementById('login-name').value.trim();
@@ -211,15 +144,19 @@
                 document.getElementById('user-display').innerText = n;
                 document.getElementById('auth-screen').style.display = 'none';
                 document.getElementById('app-wrapper').style.display = 'flex';
-                setTimeout(() => document.getElementById('app-wrapper').style.opacity = '1', 50);
+                document.getElementById('app-nav').style.display = 'flex';
+                setTimeout(() => {
+                    document.getElementById('app-wrapper').style.opacity = '1';
+                    addMessage('bot', `Olá, ${userName}. Sou o Txai. Vamos sintonizar sua paz?`);
+                }, 50);
             } else { alert("Acesso restrito."); }
         }
 
         function switchTab(t, n) {
             document.querySelectorAll('.tab-section').forEach(s => s.style.display = 'none');
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            const tab = document.getElementById(t);
-            if(tab) tab.style.display = 'flex';
+            const target = document.getElementById(t);
+            if(target) target.style.display = 'flex';
             if(n) document.getElementById(n).classList.add('active');
             if (t !== 'respira-tab') clearInterval(breathInterval);
         }
@@ -233,47 +170,47 @@
 
         function pararRespirar() { clearInterval(breathInterval); switchTab('home-tab', 'home-nav'); }
 
-        function toggleAudio() {
-            const b = document.getElementById('playBtn');
-            if (audio.paused) {
-                if (!audio.src || audio.src === "" || audio.src.includes(window.location.host)) {
-                    audio.src = playlist[currentTrackIndex].file;
-                }
-                audio.play().then(() => {
-                    b.innerText = "⏸️";
-                }).catch(e => {
-                    alert("Sintonização falhou. Verifique se os arquivos mp3 estão na raiz do GitHub com nomes em minúsculas.");
-                });
-            } else {
-                audio.pause();
-                b.innerText = "▶️";
-            }
-        }
-
-        function changeTrack(d) {
-            currentTrackIndex = (currentTrackIndex + d + playlist.length) % playlist.length;
-            document.getElementById('music-title').innerText = playlist[currentTrackIndex].title;
-            audio.src = playlist[currentTrackIndex].file;
-            audio.load();
-            if (document.getElementById('playBtn').innerText === "⏸️") {
-                audio.play().catch(e => console.error("Erro ao trocar faixa"));
-            }
-        }
-
         function addMessage(t, x) {
             const b = document.getElementById('chat-messages');
+            if(!b) return;
             const d = document.createElement('div');
             d.className = `msg ${t}`; d.innerText = x;
-            b.appendChild(d); b.scrollTop = b.scrollHeight;
+            b.appendChild(d);
+            b.scrollTop = b.scrollHeight;
             return d;
         }
 
-        async function enviarMensagemAI() {
-            const i = document.getElementById('chatInput');
-            if(!i.value.trim()) return;
-            addMessage('user', i.value); 
-            i.value = '';
-            setTimeout(() => addMessage('bot', "Estou aqui para sintonizar sua jornada, Eliade."), 800);
+        async function enviarMensagemIA() {
+            const input = document.getElementById('chatInput');
+            const prompt = input.value.trim();
+            if(!prompt) return;
+
+            addMessage('user', prompt);
+            input.value = '';
+            const typingMsg = addMessage('bot', 'Txai está sintonizando...');
+
+            try {
+                // ROTA BLINDADA COM ID DO MODELO COMPLETO
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `Você é o Txai, guia do app Lume. Responda curto para o usuário ${userName}. Mensagem: ${prompt}` }] }]
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.error) { throw new Error(data.error.message); }
+
+                typingMsg.innerText = data.candidates[0].content.parts[0].text;
+
+            } catch (e) {
+                console.error("ERRO:", e);
+                typingMsg.innerText = "Sintonização oscilou: " + e.message;
+            }
         }
     </script>
 </body>
