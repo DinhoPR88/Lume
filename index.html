@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>lume - v13.8 Final Gold</title>
+    <title>lume - v14.0 Progress Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -18,7 +18,6 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; border: none; outline: none; }
         body { font-family: -apple-system, system-ui, sans-serif; background-color: #FFF9F2; height: 100vh; width: 100vw; overflow: hidden; position: relative; }
 
-        /* FUNDO DINÂMICO */
         .bg-blobs { position: fixed; inset: 0; z-index: -1; overflow: hidden; filter: blur(80px); }
         .blob { position: absolute; width: 600px; height: 600px; border-radius: 50%; opacity: 0.3; animation: move 40s infinite alternate ease-in-out; }
         .blob-1 { background: #4DB6AC; top: -10%; left: -10%; }
@@ -27,7 +26,7 @@
 
         .glass { background: var(--glass); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 35px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
 
-        /* LOGIN COM SELO PRO */
+        /* LOGIN */
         #auth-screen { position: fixed; inset: 0; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; transition: 0.6s; }
         .auth-card { width: 100%; max-width: 350px; padding: 40px; text-align: center; }
         .auth-card input { width: 100%; padding: 18px; border-radius: 20px; background: rgba(255,255,255,0.4); margin-bottom: 12px; border: 1px solid var(--glass-border); color: var(--texto); font-family: inherit; }
@@ -47,7 +46,8 @@
         .icon-boost { width: 195px !important; height: 195px !important; }
         .icon-ghost-right { position: absolute; right: -140px; width: 400px; height: 400px; object-fit: contain; opacity: 0.12; z-index: 1; transform: rotate(15deg); }
 
-        /* RESPIRAR LUXURY */
+        /* RESPIRAR */
+        .respira-viewport { justify-content: center; height: 85vh; position: relative; display: flex; align-items: center; }
         .breath-hollow-circle { 
             width: 220px; height: 220px; border-radius: 50%; position: relative; border: 2px solid rgba(255,255,255,0.2);
             box-shadow: 0 0 30px 5px var(--fumaça-menta), inset 0 0 20px 2px var(--fumaça-menta);
@@ -59,10 +59,19 @@
         }
         #breath-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.8rem; color: var(--menta); font-weight: 600; text-shadow: 0 0 20px rgba(255,255,255,0.8); z-index: 10; pointer-events: none; }
 
-        /* PLAYER & JARDIM */
+        /* PLAYER & PROGRESO */
         .neon-ring { width: 220px; height: 220px; border-radius: 50%; border: 4px solid transparent; background: var(--neon-glow) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask-composite: exclude; animation: rotate 12s linear infinite; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(77, 182, 172, 0.2); }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .bar-chart { height: 150px; display: flex; align-items: flex-end; gap: 12px; margin: 30px 0; }
-        .bar { width: 30px; background: var(--menta); border-radius: 8px 8px 0 0; }
+        .bar { width: 30px; background: var(--menta); border-radius: 8px 8px 0 0; transition: 1s ease-out; }
+
+        /* CHAT REVISADO */
+        #chat-messages { width: 100%; flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .msg { padding: 15px 20px; border-radius: 20px; max-width: 85%; font-size: 0.95rem; line-height: 1.4; }
+        .msg.user { align-self: flex-end; background: var(--menta); color: white; border-bottom-right-radius: 5px; }
+        .msg.bot { align-self: flex-start; background: var(--glass); color: var(--texto); border-bottom-left-radius: 5px; }
+        .chat-input-container { width: 100%; padding: 15px; background: var(--glass); backdrop-filter: blur(20px); border-top: 1px solid var(--glass-border); display: flex; align-items: center; gap: 10px; border-radius: 30px; margin-top: 10px; }
+        .chat-input-container input { flex: 1; background: transparent; padding: 10px; color: var(--texto); font-size: 1rem; }
 
         /* NAV */
         nav { position: fixed; bottom: 30px; left: 30px; right: 30px; height: 85px; display: flex; justify-content: space-around; align-items: center; z-index: 2000; }
@@ -95,22 +104,31 @@
                 <div class="glass" style="width:100%; padding:20px; text-align:center; color:var(--menta); margin-bottom:25px;" id="mural-text">"Sintonize sua paz"</div>
                 
                 <div class="grid-portas">
-                    <div class="card-porta glass" onclick="switchTab('chat-tab', 'txai-nav')">
-                        <img src="neuro.png" class="icon-ghost-right"><img src="neuro.png" class="icon-img-main"><b>Neuro</b>
+                    <div class="card-porta glass" onclick="switchTab('neuro-tab', '')">
+                        <img src="./neuro.png" class="icon-ghost-right"><img src="./neuro.png" class="icon-img-main"><b>Neuro</b>
                     </div>
                     <div class="card-porta glass" onclick="switchTab('sons-tab', '')">
-                        <img src="sons.png" class="icon-ghost-right" style="width:550px; height:550px; right:-180px;"><img src="sons.png" class="icon-img-main icon-boost"><b>Sons</b>
+                        <img src="./sons.png" class="icon-ghost-right" style="width:550px; height:550px; right:-180px;"><img src="./sons.png" class="icon-img-main icon-boost"><b>Sons</b>
                     </div>
                     <div class="card-porta glass" onclick="abrirRespirar()">
-                        <img src="respirar.png" class="icon-ghost-right" style="width:550px; height:550px; right:-180px;"><img src="respirar.png" class="icon-img-main icon-boost"><b>Respirar</b>
+                        <img src="./respirar.png" class="icon-ghost-right" style="width:550px; height:550px; right:-180px;"><img src="./respirar.png" class="icon-img-main icon-boost"><b>Respirar</b>
                     </div>
                     <div class="card-porta glass" onclick="switchTab('ebooks-tab', '')">
-                        <img src="configs.png" class="icon-ghost-right"><img src="configs.png" class="icon-img-main"><b>e-books</b>
+                        <img src="./configs.png" class="icon-ghost-right"><img src="./configs.png" class="icon-img-main"><b>e-books</b>
                     </div>
                 </div>
             </section>
 
-            <section id="respira-tab" class="tab-section" style="justify-content:center; height:85vh; position:relative;">
+            <section id="neuro-tab" class="tab-section">
+                <div class="glass" style="width:100%; padding:50px; text-align:center;">
+                    <span style="font-size:4rem;">🔒</span>
+                    <h2 style="margin-top:20px; color:var(--menta); font-weight:400;">Acesso Restrito</h2>
+                    <p style="margin-top:15px; color:var(--texto); opacity:0.8;">Solicite o desbloqueio com seu especialista para acessar este módulo.</p>
+                </div>
+                <button class="btn-gold" onclick="switchTab('home-tab', 'home-nav')">Voltar</button>
+            </section>
+
+            <section id="respira-tab" class="tab-section respira-viewport">
                 <div class="breath-hollow-circle"></div>
                 <p id="breath-text">Inspire...</p>
                 <button class="btn-gold" style="margin-top:80px; width:200px; z-index:20;" onclick="pararRespirar()">Concluir</button>
@@ -130,7 +148,7 @@
             </section>
 
             <section id="progresso-tab" class="tab-section">
-                <h2 style="font-weight:300; margin-bottom:20px;">Jardim Mental</h2>
+                <h2 style="font-weight:300; margin-bottom:20px;">Meu Progresso</h2>
                 <div class="glass" style="width:100%; padding:40px; text-align:center; display:flex; flex-direction:column; align-items:center;">
                     <div class="bar-chart">
                         <div class="bar" style="height: 45%"></div>
@@ -138,7 +156,7 @@
                         <div class="bar" style="height: 65%"></div>
                         <div class="bar" style="height: 90%"></div>
                     </div>
-                    <div class="btn-gold" onclick="alert('Compartilhado com sucesso.')">COMPARTILHAR COM ESPECIALISTA</div>
+                    <div class="btn-gold" onclick="alert('Relatório de progresso enviado.')">COMPARTILHAR COM ESPECIALISTA</div>
                 </div>
                 <button class="btn-gold" style="background:rgba(255,255,255,0.2);" onclick="switchTab('home-tab', 'home-nav')">Voltar</button>
             </section>
@@ -153,25 +171,24 @@
             </section>
 
             <section id="chat-tab" class="tab-section" style="height:70vh;">
-                <div id="chat-messages" style="width:100%; flex:1; overflow-y:auto; padding:10px;"></div>
-                <div class="glass" style="width:100%; padding:15px; display:flex; margin-top:auto;">
+                <div id="chat-messages"></div>
+                <div class="chat-input-container">
                     <input type="text" id="chatInput" placeholder="Sintonizar pensamentos...">
-                    <button onclick="enviarMensagemAI()" style="color:var(--menta); font-weight:700; background:none;">ENVIAR</button>
+                    <button onclick="enviarMensagemAI()" style="color:var(--menta); font-weight:700; background:none; padding:0 10px;">ENVIAR</button>
                 </div>
             </section>
 
             <section id="config-tab" class="tab-section">
                 <h2 style="font-weight:300; margin-bottom:20px;">Configs</h2>
                 <div class="glass" style="width:100%; padding:30px; text-align:center;">
-                    <p>Sua jornada é única.</p>
-                    <div class="btn-gold" style="background:#FF5252; color:white;" onclick="location.reload()">SAIR</div>
+                    <div class="btn-gold" style="background:#FF5252; color:white;" onclick="location.reload()">SAIR DA CONTA</div>
                 </div>
             </section>
         </div>
 
         <nav class="glass">
             <div id="home-nav" class="nav-item active" onclick="switchTab('home-tab', 'home-nav')"><span>🏠</span>Home</div>
-            <div id="prog-nav" class="nav-item" onclick="switchTab('progresso-tab', 'prog-nav')"><span>📈</span>Jardim</div>
+            <div id="prog-nav" class="nav-item" onclick="switchTab('progresso-tab', 'prog-nav')"><span>📈</span>Progresso</div>
             <div id="txai-nav" class="nav-item" onclick="switchTab('chat-tab', 'txai-nav')"><span>💬</span>Txai</div>
             <div id="conf-nav" class="nav-item" onclick="switchTab('config-tab', 'conf-nav')"><span>⚙️</span>Configs</div>
         </nav>
@@ -182,7 +199,10 @@
         let userName = "";
         let breathInterval;
         let currentTrackIndex = 0;
-        const playlist = [{ title: "Sintonização 432Hz", file: "432hz.mp3" }, { title: "Frequência 528Hz", file: "528hz.mp3" }];
+        const playlist = [
+            { title: "Sintonização 432Hz", file: "./432hz.mp3" }, 
+            { title: "Frequência 528Hz", file: "./528hz.mp3" }
+        ];
 
         function entrar() {
             const n = document.getElementById('login-name').value.trim();
@@ -198,7 +218,8 @@
         function switchTab(t, n) {
             document.querySelectorAll('.tab-section').forEach(s => s.style.display = 'none');
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            document.getElementById(t).style.display = 'flex';
+            const tab = document.getElementById(t);
+            if(tab) tab.style.display = 'flex';
             if(n) document.getElementById(n).classList.add('active');
             if (t !== 'respira-tab') clearInterval(breathInterval);
         }
@@ -214,29 +235,43 @@
 
         function toggleAudio() {
             const b = document.getElementById('playBtn');
-            if (audio.paused) { audio.src = "audio/" + playlist[currentTrackIndex].file; audio.play(); b.innerText = "⏸️"; }
-            else { audio.pause(); b.innerText = "▶️"; }
+            if (audio.paused) {
+                if (!audio.src || audio.src === "") {
+                    audio.src = playlist[currentTrackIndex].file;
+                }
+                audio.play().then(() => {
+                    b.innerText = "⏸️";
+                }).catch(e => {
+                    alert("Erro ao carregar áudio. Verifique se os arquivos mp3 estão na pasta raiz do GitHub.");
+                });
+            } else {
+                audio.pause();
+                b.innerText = "▶️";
+            }
         }
 
         function changeTrack(d) {
             currentTrackIndex = (currentTrackIndex + d + playlist.length) % playlist.length;
             document.getElementById('music-title').innerText = playlist[currentTrackIndex].title;
-            if (!audio.paused) { audio.src = "audio/" + playlist[currentTrackIndex].file; audio.play(); }
-        }
-
-        async function enviarMensagemAI() {
-            const i = document.getElementById('chatInput');
-            if(!i.value.trim()) return;
-            addMessage('user', i.value); i.value = '';
-            setTimeout(() => addMessage('bot', "Estou em sintonia com você."), 1000);
+            audio.src = playlist[currentTrackIndex].file;
+            if (!audio.paused) audio.play();
+            document.getElementById('playBtn').innerText = audio.paused ? "▶️" : "⏸️";
         }
 
         function addMessage(t, x) {
             const b = document.getElementById('chat-messages');
             const d = document.createElement('div');
-            d.className = `msg ${t} glass`; d.innerText = x;
+            d.className = `msg ${t}`; d.innerText = x;
             b.appendChild(d); b.scrollTop = b.scrollHeight;
             return d;
+        }
+
+        async function enviarMensagemAI() {
+            const i = document.getElementById('chatInput');
+            if(!i.value.trim()) return;
+            addMessage('user', i.value); 
+            i.value = '';
+            setTimeout(() => addMessage('bot', "Estou aqui para sintonizar sua jornada, Eliade."), 800);
         }
     </script>
 </body>
