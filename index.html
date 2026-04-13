@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>lume - v13.8 Final Gold</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --menta: #4DB6AC; --texto: #34495E;
+            --glass: rgba(255, 255, 255, 0.22);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --gold-btn: linear-gradient(135deg, #F9E3C5 0%, #F2D1A8 100%);
+            --neon-glow: linear-gradient(135deg, #9C27B0, #2196F3, #4DB6AC);
+            --fumaça-menta: rgba(77, 182, 172, 0.5);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; border: none; outline: none; }
+        body { font-family: -apple-system, system-ui, sans-serif; background-color: #FFF9F2; height: 100vh; width: 100vw; overflow: hidden; position: relative; }
+
+        /* FUNDO DINÂMICO */
+        .bg-blobs { position: fixed; inset: 0; z-index: -1; overflow: hidden; filter: blur(80px); }
+        .blob { position: absolute; width: 600px; height: 600px; border-radius: 50%; opacity: 0.3; animation: move 40s infinite alternate ease-in-out; }
+        .blob-1 { background: #4DB6AC; top: -10%; left: -10%; }
+        .blob-2 { background: #F2D1A8; bottom: -10%; right: -10%; }
+        @keyframes move { from { transform: translate(0, 0) scale(1); } to { transform: translate(150px, 100px) scale(1.3); } }
+
+        .glass { background: var(--glass); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 35px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
+
+        /* LOGIN COM SELO PRO */
+        #auth-screen { position: fixed; inset: 0; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; transition: 0.6s; }
+        .auth-card { width: 100%; max-width: 350px; padding: 40px; text-align: center; }
+        .auth-card input { width: 100%; padding: 18px; border-radius: 20px; background: rgba(255,255,255,0.4); margin-bottom: 12px; border: 1px solid var(--glass-border); color: var(--texto); font-family: inherit; }
+        .pro-badge { color: var(--menta); font-size: 0.75rem; letter-spacing: 3px; margin-top: 20px; font-weight: 600; text-transform: uppercase; }
+
+        /* ESTRUTURA APP */
+        #app-wrapper { display: none; height: 100vh; flex-direction: column; opacity: 0; transition: 0.8s; }
+        .main-content { flex: 1; overflow-y: auto; padding: 20px 20px 140px; display: flex; flex-direction: column; align-items: center; width: 100%; }
+        .tab-section { display: none; width: 100%; flex-direction: column; align-items: center; }
+        .tab-section.active { display: flex; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* HOME GRID */
+        .grid-portas { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 400px; }
+        .card-porta { position: relative; height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; overflow: hidden; }
+        .icon-img-main { width: 130px; height: 130px; object-fit: contain; z-index: 5; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15)); margin-bottom: 5px; }
+        .icon-boost { width: 195px !important; height: 195px !important; }
+        .icon-ghost-right { position: absolute; right: -140px; width: 400px; height: 400px; object-fit: contain; opacity: 0.12; z-index: 1; transform: rotate(15deg); }
+
+        /* RESPIRAR LUXURY */
+        .breath-hollow-circle { 
+            width: 220px; height: 220px; border-radius: 50%; position: relative; border: 2px solid rgba(255,255,255,0.2);
+            box-shadow: 0 0 30px 5px var(--fumaça-menta), inset 0 0 20px 2px var(--fumaça-menta);
+            animation: breatheAnimationLuxury 8s infinite ease-in-out; 
+        }
+        @keyframes breatheAnimationLuxury { 
+            0%, 100% { transform: scale(1); opacity: 0.5; filter: blur(6px); } 
+            50% { transform: scale(1.8); opacity: 1; filter: blur(1px); box-shadow: 0 0 80px 25px var(--fumaça-menta), inset 0 0 50px 10px var(--fumaça-menta); } 
+        }
+        #breath-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.8rem; color: var(--menta); font-weight: 600; text-shadow: 0 0 20px rgba(255,255,255,0.8); z-index: 10; pointer-events: none; }
+
+        /* PLAYER & JARDIM */
+        .neon-ring { width: 220px; height: 220px; border-radius: 50%; border: 4px solid transparent; background: var(--neon-glow) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask-composite: exclude; animation: rotate 12s linear infinite; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(77, 182, 172, 0.2); }
+        .bar-chart { height: 150px; display: flex; align-items: flex-end; gap: 12px; margin: 30px 0; }
+        .bar { width: 30px; background: var(--menta); border-radius: 8px 8px 0 0; }
+
+        /* NAV */
+        nav { position: fixed; bottom: 30px; left: 30px; right: 30px; height: 85px; display: flex; justify-content: space-around; align-items: center; z-index: 2000; }
+        .nav-item { text-align: center; color: #90A4AE; font-size: 0.65rem; font-weight: 600; flex: 1; cursor: pointer; }
+        .nav-item.active { color: var(--menta); transform: translateY(-5px); transition: 0.3s; }
+        .nav-item span { display: block; font-size: 1.6rem; }
+
+        .btn-gold { width: 100%; max-width: 360px; background: var(--gold-btn); padding: 22px; border-radius: 50px; color: #8D6E63; font-weight: 600; text-align: center; margin-top: 20px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-blobs"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+
+    <div id="auth-screen">
+        <div style="font-family: 'Comfortaa'; color: var(--menta); font-size: 4.5rem; margin-bottom: 20px;">lume</div>
+        <div class="glass auth-card">
+            <input type="text" id="login-name" placeholder="Nome">
+            <input type="password" id="login-pass" placeholder="Senha">
+            <div class="btn-gold" onclick="entrar()">Sintonizar</div>
+            <div class="pro-badge">LUME PRO</div>
+        </div>
+    </div>
+
+    <div id="app-wrapper">
+        <div class="main-content">
+            <section id="home-tab" class="tab-section active">
+                <div style="font-family: 'Comfortaa'; color: var(--menta); font-size: 2.8rem;">lume</div>
+                <h2 style="font-weight: 300; margin: 25px 0;">Olá, <span id="user-display">Eliade</span></h2>
+                <div class="glass" style="width:100%; padding:20px; text-align:center; color:var(--menta); margin-bottom:25px;" id="mural-text">"Sintonize sua paz"</div>
+                
+                <div class="grid-portas">
+                    <div class="card-porta glass" onclick="switchTab('chat-tab', 'txai-nav')">
+                        <img src="neuro.png" class="icon-ghost-right"><img src="neuro.png" class="icon-img-main"><b>Neuro</b>
+                    </div>
+                    <div class="card-porta glass" onclick="switchTab('sons-tab', '')">
+                        <img src="sons.png" class="icon-ghost-right" style="width:550px; height:550px; right:-180px;"><img src="sons.png" class="icon-img-main icon-boost"><b>Sons</b>
+                    </div>
+                    <div class="card-porta glass" onclick="abrirRespirar()">
+                        <img src="respirar.png" class="icon-ghost-right" style="width:550px; height:550px; right:-180px;"><img src="respirar.png" class="icon-img-main icon-boost"><b>Respirar</b>
+                    </div>
+                    <div class="card-porta glass" onclick="switchTab('ebooks-tab', '')">
+                        <img src="configs.png" class="icon-ghost-right"><img src="configs.png" class="icon-img-main"><b>e-books</b>
+                    </div>
+                </div>
+            </section>
+
+            <section id="respira-tab" class="tab-section" style="justify-content:center; height:85vh; position:relative;">
+                <div class="breath-hollow-circle"></div>
+                <p id="breath-text">Inspire...</p>
+                <button class="btn-gold" style="margin-top:80px; width:200px; z-index:20;" onclick="pararRespirar()">Concluir</button>
+            </section>
+
+            <section id="sons-tab" class="tab-section">
+                <div class="glass" style="padding:40px; text-align:center; display:flex; flex-direction:column; align-items:center;">
+                    <div class="neon-ring"><span style="font-size:5rem;">🎵</span></div>
+                    <h3 id="music-title" style="margin-top:25px; color:var(--menta);">Sintonização 432Hz</h3>
+                    <div style="display:flex; justify-content:center; gap:20px; margin-top:25px;">
+                        <button class="glass" onclick="changeTrack(-1)" style="padding:15px;">⏮️</button>
+                        <button class="glass" id="playBtn" onclick="toggleAudio()" style="padding:15px; width:75px;">▶️</button>
+                        <button class="glass" onclick="changeTrack(1)" style="padding:15px;">⏭️</button>
+                    </div>
+                </div>
+                <button class="btn-gold" onclick="switchTab('home-tab', 'home-nav')">Voltar</button>
+            </section>
+
+            <section id="progresso-tab" class="tab-section">
+                <h2 style="font-weight:300; margin-bottom:20px;">Jardim Mental</h2>
+                <div class="glass" style="width:100%; padding:40px; text-align:center; display:flex; flex-direction:column; align-items:center;">
+                    <div class="bar-chart">
+                        <div class="bar" style="height: 45%"></div>
+                        <div class="bar" style="height: 80%"></div>
+                        <div class="bar" style="height: 65%"></div>
+                        <div class="bar" style="height: 90%"></div>
+                    </div>
+                    <div class="btn-gold" onclick="alert('Compartilhado com sucesso.')">COMPARTILHAR COM ESPECIALISTA</div>
+                </div>
+                <button class="btn-gold" style="background:rgba(255,255,255,0.2);" onclick="switchTab('home-tab', 'home-nav')">Voltar</button>
+            </section>
+
+            <section id="ebooks-tab" class="tab-section">
+                <h2 style="font-weight:300; margin-bottom:20px;">Biblioteca e-books</h2>
+                <div class="glass" style="width:100%; padding:40px; text-align:center;">
+                    <p>Guia Prático de Frequências (PDF)</p>
+                    <div class="btn-gold">Baixar Agora</div>
+                </div>
+                <button class="btn-gold" onclick="switchTab('home-tab', 'home-nav')">Voltar</button>
+            </section>
+
+            <section id="chat-tab" class="tab-section" style="height:70vh;">
+                <div id="chat-messages" style="width:100%; flex:1; overflow-y:auto; padding:10px;"></div>
+                <div class="glass" style="width:100%; padding:15px; display:flex; margin-top:auto;">
+                    <input type="text" id="chatInput" placeholder="Sintonizar pensamentos...">
+                    <button onclick="enviarMensagemAI()" style="color:var(--menta); font-weight:700; background:none;">ENVIAR</button>
+                </div>
+            </section>
+
+            <section id="config-tab" class="tab-section">
+                <h2 style="font-weight:300; margin-bottom:20px;">Configs</h2>
+                <div class="glass" style="width:100%; padding:30px; text-align:center;">
+                    <p>Sua jornada é única.</p>
+                    <div class="btn-gold" style="background:#FF5252; color:white;" onclick="location.reload()">SAIR</div>
+                </div>
+            </section>
+        </div>
+
+        <nav class="glass">
+            <div id="home-nav" class="nav-item active" onclick="switchTab('home-tab', 'home-nav')"><span>🏠</span>Home</div>
+            <div id="prog-nav" class="nav-item" onclick="switchTab('progresso-tab', 'prog-nav')"><span>📈</span>Jardim</div>
+            <div id="txai-nav" class="nav-item" onclick="switchTab('chat-tab', 'txai-nav')"><span>💬</span>Txai</div>
+            <div id="conf-nav" class="nav-item" onclick="switchTab('config-tab', 'conf-nav')"><span>⚙️</span>Configs</div>
+        </nav>
+    </div>
+
+    <script>
+        const audio = new Audio();
+        let userName = "";
+        let breathInterval;
+        let currentTrackIndex = 0;
+        const playlist = [{ title: "Sintonização 432Hz", file: "432hz.mp3" }, { title: "Frequência 528Hz", file: "528hz.mp3" }];
+
+        function entrar() {
+            const n = document.getElementById('login-name').value.trim();
+            if (n.toLowerCase() === "eliade" || n.toLowerCase() === "ricardo") {
+                userName = n;
+                document.getElementById('user-display').innerText = n;
+                document.getElementById('auth-screen').style.display = 'none';
+                document.getElementById('app-wrapper').style.display = 'flex';
+                setTimeout(() => document.getElementById('app-wrapper').style.opacity = '1', 50);
+            } else { alert("Acesso restrito."); }
+        }
+
+        function switchTab(t, n) {
+            document.querySelectorAll('.tab-section').forEach(s => s.style.display = 'none');
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.getElementById(t).style.display = 'flex';
+            if(n) document.getElementById(n).classList.add('active');
+            if (t !== 'respira-tab') clearInterval(breathInterval);
+        }
+
+        function abrirRespirar() {
+            switchTab('respira-tab', '');
+            const txt = document.getElementById('breath-text');
+            txt.innerText = "Inspire...";
+            breathInterval = setInterval(() => { txt.innerText = txt.innerText === "Inspire..." ? "Expire..." : "Inspire..."; }, 4000);
+        }
+
+        function pararRespirar() { clearInterval(breathInterval); switchTab('home-tab', 'home-nav'); }
+
+        function toggleAudio() {
+            const b = document.getElementById('playBtn');
+            if (audio.paused) { audio.src = "audio/" + playlist[currentTrackIndex].file; audio.play(); b.innerText = "⏸️"; }
+            else { audio.pause(); b.innerText = "▶️"; }
+        }
+
+        function changeTrack(d) {
+            currentTrackIndex = (currentTrackIndex + d + playlist.length) % playlist.length;
+            document.getElementById('music-title').innerText = playlist[currentTrackIndex].title;
+            if (!audio.paused) { audio.src = "audio/" + playlist[currentTrackIndex].file; audio.play(); }
+        }
+
+        async function enviarMensagemAI() {
+            const i = document.getElementById('chatInput');
+            if(!i.value.trim()) return;
+            addMessage('user', i.value); i.value = '';
+            setTimeout(() => addMessage('bot', "Estou em sintonia com você."), 1000);
+        }
+
+        function addMessage(t, x) {
+            const b = document.getElementById('chat-messages');
+            const d = document.createElement('div');
+            d.className = `msg ${t} glass`; d.innerText = x;
+            b.appendChild(d); b.scrollTop = b.scrollHeight;
+            return d;
+        }
+    </script>
+</body>
+</html>

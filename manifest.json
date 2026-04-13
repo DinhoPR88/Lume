@@ -1,0 +1,16 @@
+{
+  "name": "lume - Refúgio Vital",
+  "short_name": "lume",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#FFF8E1",
+  "theme_color": "#A9F5D8",
+  "description": "Seu refúgio de regulação emocional e acomodação sensorial.",
+  "icons": [
+    {
+      "src": "logo-lume.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
