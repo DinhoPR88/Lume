@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>lume - v16.2 Absolute Edition</title>
+    <title>lume - Versão Final</title>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -11,7 +11,6 @@
             --glass: rgba(255, 255, 255, 0.22);
             --glass-border: rgba(255, 255, 255, 0.5);
             --gold-btn: linear-gradient(135deg, #F9E3C5 0%, #F2D1A8 100%);
-            --neon-glow: linear-gradient(135deg, #9C27B0, #2196F3, #4DB6AC);
             --fumaça-menta: rgba(77, 182, 172, 0.5);
         }
 
@@ -19,28 +18,29 @@
         body { font-family: -apple-system, system-ui, sans-serif; background-color: #FFF9F2; height: 100vh; width: 100vw; overflow: hidden; position: relative; }
 
         .bg-blobs { position: fixed; inset: 0; z-index: -1; overflow: hidden; filter: blur(80px); }
-        .blob { position: absolute; width: 600px; height: 600px; border-radius: 50%; opacity: 0.3; animation: move 40s infinite alternate ease-in-out; }
-        .blob-1 { background: #4DB6AC; top: -10%; left: -10%; }
-        .blob-2 { background: #F2D1A8; bottom: -10%; right: -10%; }
-        @keyframes move { from { transform: translate(0, 0) scale(1); } to { transform: translate(150px, 100px) scale(1.3); } }
+        .blob { position: absolute; width: 600px; height: 600px; border-radius: 50%; opacity: 0.3; animation: move 40s infinite alternate ease-in-out; background: var(--menta); }
+        @keyframes move { from { transform: translate(0, 0); } to { transform: translate(120px, 120px); } }
 
         .glass { background: var(--glass); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 35px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
 
+        /* AUTH */
         #auth-screen { position: fixed; inset: 0; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; background: #FFF9F2; }
         .auth-card { width: 100%; max-width: 350px; padding: 40px; text-align: center; }
         .auth-card input { width: 100%; padding: 18px; border-radius: 20px; background: rgba(255,255,255,0.4); margin-bottom: 12px; border: 1px solid var(--glass-border); color: var(--texto); font-family: inherit; }
 
+        /* APP STRUCTURE */
         #app-wrapper { display: none; height: 100vh; flex-direction: column; opacity: 0; transition: 0.8s; position: relative; z-index: 10; }
         .main-content { flex: 1; overflow-y: auto; padding: 20px 20px 140px; display: flex; flex-direction: column; align-items: center; width: 100%; }
         .tab-section { display: none; width: 100%; flex-direction: column; align-items: center; }
         .tab-section.active { display: flex; animation: fadeIn 0.5s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
+        /* HOME GRID */
         .grid-portas { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 400px; }
         .card-porta { position: relative; height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; overflow: hidden; }
-        .icon-img-main { width: 130px; height: 130px; object-fit: contain; z-index: 5; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15)); margin-bottom: 5px; }
-        .icon-ghost-right { position: absolute; right: -140px; width: 400px; height: 400px; object-fit: contain; opacity: 0.12; z-index: 1; transform: rotate(15deg); }
+        .icon-img-main { width: 120px; height: 120px; object-fit: contain; z-index: 5; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15)); }
 
+        /* RESPIRAR */
         .respira-viewport { justify-content: center; height: 85vh; position: relative; display: flex; align-items: center; }
         .breath-hollow-circle { 
             width: 220px; height: 220px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2);
@@ -53,6 +53,7 @@
         }
         #breath-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.8rem; color: var(--menta); font-weight: 600; text-shadow: 0 0 20px rgba(255,255,255,0.8); z-index: 10; pointer-events: none; }
 
+        /* CHAT */
         #chat-messages { width: 100%; flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
         .msg { padding: 15px 20px; border-radius: 25px; max-width: 85%; font-size: 0.95rem; line-height: 1.4; animation: msgSlide 0.3s ease; }
         @keyframes msgSlide { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -61,8 +62,8 @@
         .chat-input-wrapper { width: 100%; padding: 15px; position: sticky; bottom: 0; }
         .chat-input-container { background: var(--glass); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); padding: 10px 20px; border-radius: 50px; display: flex; align-items: center; gap: 10px; }
         .chat-input-container input { flex: 1; background: transparent; color: var(--texto); font-size: 1rem; }
-        .chat-send-btn { background: var(--menta); color: white; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; }
 
+        /* NAV */
         nav { position: fixed; bottom: 30px; left: 30px; right: 30px; height: 85px; display: flex; justify-content: space-around; align-items: center; z-index: 2000; }
         .nav-item { text-align: center; color: #90A4AE; font-size: 0.65rem; font-weight: 600; flex: 1; cursor: pointer; }
         .nav-item.active { color: var(--menta); transform: translateY(-5px); transition: 0.3s; }
@@ -73,7 +74,7 @@
 </head>
 <body>
 
-    <div class="bg-blobs"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+    <div class="bg-blobs"><div class="blob"></div></div>
 
     <div id="auth-screen">
         <div style="font-family: 'Comfortaa'; color: var(--menta); font-size: 4.5rem; margin-bottom: 20px;">lume</div>
@@ -91,27 +92,19 @@
                 <div style="font-family: 'Comfortaa'; color: var(--menta); font-size: 2.8rem;">lume</div>
                 <h2 style="font-weight: 300; margin: 25px 0;">Olá, <span id="user-display">Eliade</span></h2>
                 <div class="grid-portas">
-                    <div class="card-porta glass" onclick="switchTab('neuro-tab', '')">
-                        <img src="./neuro.png" class="icon-ghost-right"><img src="./neuro.png" class="icon-img-main"><b>Neuro</b>
-                    </div>
-                    <div class="card-porta glass" onclick="switchTab('sons-tab', '')">
-                        <img src="./sons.png" class="icon-ghost-right" style="width:550px; height:550px; right:-180px;"><img src="./sons.png" class="icon-img-main icon-boost"><b>Sons</b>
-                    </div>
-                    <div class="card-porta glass" onclick="abrirRespirar()">
-                        <img src="./respirar.png" class="icon-ghost-right" style="width:550px; height:550px; right:-180px;"><img src="./respirar.png" class="icon-img-main icon-boost"><b>Respirar</b>
-                    </div>
-                    <div class="card-porta glass" onclick="switchTab('ebooks-tab', '')">
-                        <img src="./configs.png" class="icon-ghost-right"><img src="./configs.png" class="icon-img-main"><b>e-books</b>
-                    </div>
+                    <div class="card-porta glass" onclick="switchTab('neuro-tab', '')"><img src="./neuro.png" class="icon-img-main"><b>Neuro</b></div>
+                    <div class="card-porta glass" onclick="switchTab('sons-tab', '')"><img src="./sons.png" class="icon-img-main"><b>Sons</b></div>
+                    <div class="card-porta glass" onclick="abrirRespirar()"><img src="./respirar.png" class="icon-img-main"><b>Respirar</b></div>
+                    <div class="card-porta glass" onclick="switchTab('ebooks-tab', '')"><img src="./configs.png" class="icon-img-main"><b>e-books</b></div>
                 </div>
             </section>
 
-            <section id="chat-tab" class="tab-section" style="height:75vh; padding-bottom: 0;">
+            <section id="chat-tab" class="tab-section" style="height:75vh;">
                 <div id="chat-messages"></div>
                 <div class="chat-input-wrapper">
                     <div class="chat-input-container">
                         <input type="text" id="chatInput" placeholder="Fale com o Txai..." onkeypress="if(event.key==='Enter') enviarMensagemIA()">
-                        <button class="chat-send-btn" onclick="enviarMensagemIA()">↑</button>
+                        <button onclick="enviarMensagemIA()" style="background:var(--menta); color:white; width:40px; height:40px; border-radius:50%; font-weight:bold;">↑</button>
                     </div>
                 </div>
             </section>
@@ -119,9 +112,9 @@
             <section id="neuro-tab" class="tab-section"><div class="glass" style="padding:50px; text-align:center;">🔒 Acesso Restrito.</div><button class="btn-gold" onclick="switchTab('home-tab', 'home-nav')">Voltar</button></section>
             <section id="respira-tab" class="tab-section respira-viewport"><div class="breath-hollow-circle"></div><p id="breath-text">Inspire...</p><button class="btn-gold" style="margin-top:80px; width:200px;" onclick="pararRespirar()">Concluir</button></section>
             <section id="sons-tab" class="tab-section"><div class="glass" style="padding:40px;">Playlist em 432Hz</div><button class="btn-gold" onclick="switchTab('home-tab', 'home-nav')">Voltar</button></section>
-            <section id="progresso-tab" class="tab-section"><h2 style="font-weight:300;">Meu Progresso</h2><div class="glass" style="width:100%; padding:40px;">Status de Sintonização</div><button class="btn-gold" onclick="switchTab('home-tab', 'home-nav')">Voltar</button></section>
-            <section id="ebooks-tab" class="tab-section"><h2 style="font-weight:300;">e-books</h2><div class="glass" style="width:100%; padding:40px;">Biblioteca Digital</div><button class="btn-gold" onclick="switchTab('home-tab', 'home-nav')">Voltar</button></section>
-            <section id="config-tab" class="tab-section"><h2 style="font-weight:300;">Configs</h2><div class="glass" style="width:100%; padding:30px;"><div class="btn-gold" style="background:#FF5252; color:white;" onclick="location.reload()">Sair</div></div></section>
+            <section id="progresso-tab" class="tab-section"><div class="glass" style="padding:40px;">Estatísticas de Paz</div><button class="btn-gold" onclick="switchTab('home-tab', 'home-nav')">Voltar</button></section>
+            <section id="ebooks-tab" class="tab-section"><div class="glass" style="padding:40px;">Biblioteca de e-books</div><button class="btn-gold" onclick="switchTab('home-tab', 'home-nav')">Voltar</button></section>
+            <section id="config-tab" class="tab-section"><div class="glass" style="padding:30px;"><div class="btn-gold" style="background:#FF5252; color:white;" onclick="location.reload()">Sair</div></div></section>
         </div>
 
         <nav id="app-nav" class="glass" style="display:none;">
@@ -133,7 +126,8 @@
     </div>
 
     <script>
-        const GEMINI_API_KEY = "AIzaSyDZSCogB7fH04o9NfmjHKnHCLqy5HTTJCo"; 
+        // QUANDO TIVER UMA CHAVE NOVA, COLE ABAIXO
+        const GEMINI_API_KEY = "COLE_SUA_CHAVE_NOVA_AQUI"; 
         let userName = "";
         let breathInterval;
 
@@ -147,9 +141,9 @@
                 document.getElementById('app-nav').style.display = 'flex';
                 setTimeout(() => {
                     document.getElementById('app-wrapper').style.opacity = '1';
-                    addMessage('bot', `Olá, ${userName}. Sou o Txai. Vamos sintonizar sua paz?`);
+                    addMessage('bot', `Bem-vindo, ${userName}. Sou o Txai. Como posso te guiar hoje?`);
                 }, 50);
-            } else { alert("Acesso restrito."); }
+            } else { alert("Acesso negado."); }
         }
 
         function switchTab(t, n) {
@@ -172,11 +166,9 @@
 
         function addMessage(t, x) {
             const b = document.getElementById('chat-messages');
-            if(!b) return;
             const d = document.createElement('div');
             d.className = `msg ${t}`; d.innerText = x;
-            b.appendChild(d);
-            b.scrollTop = b.scrollHeight;
+            b.appendChild(d); b.scrollTop = b.scrollHeight;
             return d;
         }
 
@@ -187,29 +179,28 @@
 
             addMessage('user', prompt);
             input.value = '';
-            const typingMsg = addMessage('bot', 'Txai está sintonizando...');
+            const loading = addMessage('bot', 'Txai está sintonizando...');
+
+            if(GEMINI_API_KEY === "AIzaSyBwthIafhOqd4YgRqxZHoDssrkLMaGziQE") {
+                loading.innerText = "Sistema aguardando chave API ativa.";
+                return;
+            }
 
             try {
-                // ROTA BLINDADA COM ID DO MODELO COMPLETO
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
-                
-                const response = await fetch(url, {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: `Você é o Txai, guia do app Lume. Responda curto para o usuário ${userName}. Mensagem: ${prompt}` }] }]
-                    })
+                    body: JSON.stringify({ contents: [{ parts: [{ text: `Responda curto para ${userName}: ${prompt}` }] }] })
                 });
 
                 const data = await response.json();
-
-                if (data.error) { throw new Error(data.error.message); }
-
-                typingMsg.innerText = data.candidates[0].content.parts[0].text;
-
+                if (data.candidates && data.candidates[0].content) {
+                    loading.innerText = data.candidates[0].content.parts[0].text;
+                } else {
+                    loading.innerText = "Sintonização oscilou. Verifique a conta Google.";
+                }
             } catch (e) {
-                console.error("ERRO:", e);
-                typingMsg.innerText = "Sintonização oscilou: " + e.message;
+                loading.innerText = "Erro de conexão com o motor central.";
             }
         }
     </script>
